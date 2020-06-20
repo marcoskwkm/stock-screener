@@ -1,39 +1,34 @@
 import React from 'react'
-import { Container, Form } from 'react-bootstrap'
+import { Form } from 'react-bootstrap'
 
-const metricsList = [
-  { id: 'name', label: 'Name' },
-  { id: 'price', label: 'Price' },
-  { id: 'pchange', label: '% Change' },
-  { id: 'vol', label: 'Volume' },
-  { id: 'avgvol', label: 'Avg Vol (3 month)' },
-  { id: 'mktcap', label: 'Market Cap' },
-  { id: 'peratio', label: 'PE Ratio (TTM)' },
-  { id: 'weekrange', label: '52 Week Range' },
-]
+interface Props {
+  metrics: any
+  onSelectedMetricChange: (id: string, active: boolean) => void
+}
 
-const Filter = () => {
+const Filter: React.FC<Props> = ({ metrics, onSelectedMetricChange }) => {
   return (
-    <Container fluid>
+    <>
       <h5>Applied filters</h5>
       <Form.Group controlId="selectedMetricsForm">
         <Form.Label>Selected metrics</Form.Label>
         <div>
-          {metricsList.map((metric) => (
+          {Object.keys(metrics).map((id: string) => (
             <Form.Check
               inline
               type="checkbox"
-              id={metric.id}
-              key={metric.id}
-              label={metric.label}
+              id={id}
+              key={id}
+              label={metrics[id].label}
+              checked={metrics[id].active}
               onChange={(event: any) =>
-                console.log(`${metric.label}: ${event.target.checked}`)
+                onSelectedMetricChange(id, event.target.checked)
               }
             />
           ))}
         </div>
       </Form.Group>
-    </Container>
+    </>
   )
 }
 

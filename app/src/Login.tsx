@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import { Button, Form, Nav, Navbar } from 'react-bootstrap'
 
+import { useUserContext } from './UserContext'
+
 type State = 'initial' | 'form-open' | 'logged-in'
 
 const Login = () => {
   const [state, setState] = useState<State>('initial')
-  const [user, setUser] = useState<string | null>(null)
+  const { user, setUser } = useUserContext()
 
   const handleUserInputChange = (event: any) => setUser(event.target.value)
 

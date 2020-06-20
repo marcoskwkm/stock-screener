@@ -3,15 +3,18 @@ import { Navbar } from 'react-bootstrap'
 
 import Login from './Login'
 import Screener from './Screener'
+import { UserContextProvider } from './UserContext'
 
 function App() {
   return (
     <div className="App">
-      <Navbar>
-        <Navbar.Brand className="mr-auto">Stock Screener</Navbar.Brand>
-        <Login />
-      </Navbar>
-      <Screener />
+      <UserContextProvider>
+        <Navbar className="bb">
+          <Navbar.Brand className="mr-auto">Stock Screener</Navbar.Brand>
+          <Login />
+        </Navbar>
+        <Screener />
+      </UserContextProvider>
     </div>
   )
 }
