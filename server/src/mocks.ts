@@ -288,10 +288,10 @@ interface Data {
   peratio: string
 }
 
-export const mockedData: Data[] = rawData.map((item) => ({
+export const getMockedData: () => Data[] = () => rawData.map((item) => ({
   symbol: item[0],
   name: item[1],
-  price: item[2],
+  price: (parseFloat(item[2]) * (1.1 - 0.2 * Math.random())).toFixed(2),
   change: item[3],
   pchange: item[4],
   vol: item[5],

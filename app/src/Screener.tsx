@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import axios, { AxiosResponse } from 'axios'
 import { Container, Row, Spinner } from 'react-bootstrap'
 
@@ -31,6 +31,15 @@ const Screener = () => {
     }
   }, [metrics, selectedMetrics, setSelectedMetrics])
 
+  const handleRefetchData = useCallback(async () => {
+    await axios
+      .get(`${SERVER_URL}/get-data`)
+      .then((res: AxiosResponse<any>) => {
+        const { data } = res.data
+        setMetricsData(data)
+      })
+  }, [setMetricsData])
+
   if (loading) {
     return (
       <Container>
@@ -44,7 +53,11 @@ const Screener = () => {
   return (
     <div className="pa3">
       <Filter metrics={metrics} />
-      <Metrics metrics={metrics} data={metricsData} />
+      <Metrics
+        metrics={metrics}
+        data={metricsData}
+        onRefetchData={handleRefetchData}
+      />
     </div>
   )
 }

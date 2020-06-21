@@ -3,7 +3,7 @@ import express, { RequestHandler } from 'express'
 import knex from 'knex'
 import bodyParser from 'body-parser'
 
-import { metricsList, mockedData } from './mocks'
+import { metricsList, getMockedData } from './mocks'
 
 const PORT = process.env.PORT || 3001
 
@@ -30,7 +30,7 @@ const rootHandler: RequestHandler = async (_, res) => {
 }
 
 const getDataHandler: RequestHandler = async (_, res) => {
-  res.json({ data: mockedData, metrics: metricsList })
+  res.json({ data: getMockedData(), metrics: metricsList })
 }
 
 const getFiltersHandler: RequestHandler = async (req, res) => {
