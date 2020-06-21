@@ -10,24 +10,27 @@ type State = 'initial' | 'form-open' | 'logged-in'
 const Login = () => {
   const [state, setState] = useState<State>('initial')
   const [loading, setLoading] = useState<boolean>(false)
+  const [userInput, setUserInput] = useState<string>('')
+
   const { user, setUser, setUserFiltersList } = useUserContext()
 
-  const handleUserInputChange = (event: any) => setUser(event.target.value)
+  const handleUserInputChange = (event: any) => setUserInput(event.target.value)
 
   const handleSubmit = async (event: any) => {
     event.preventDefault()
 
-    if (!user) {
+    if (!userInput) {
       return
     }
 
     setLoading(true)
 
     axios
-      .get(`${SERVER_URL}/get-filters?user=${user}`)
+      .get(`${SERVER_URL}/get-filters?user=${userInput}`)
       .then((res: AxiosResponse<UserFilter[]>) => {
         setUserFiltersList(res.data)
         setLoading(false)
+        setUser(userInput)
         setState('logged-in')
       })
   }

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button, Form } from 'react-bootstrap'
 
+import SaveFilters from './SaveFilters'
 import { useUserContext } from './UserContext'
 
 interface Props {
@@ -42,16 +43,15 @@ const Filter: React.FC<Props> = ({ metrics }) => {
   }
 
   return (
-    <>
+    <div className="mb-2">
       <h5>Applied filters</h5>
-      {userFiltersList && (
-        <div className="pb2">
+      {userFiltersList && userFiltersList.length > 0 && (
+        <div className="pb-2">
           <Form.Label>Saved filters</Form.Label>
-          {userFiltersList.length === 0 && <p>No saved filters</p>}
           <div>
             {userFiltersList.map((userFilter) => (
               <Button
-                className="p-0 mr-2"
+                className="p-0 mr-2 text-decoration-none"
                 variant="link"
                 key={userFilter.name}
                 onClick={() => handleSelectSavedFilter(userFilter)}
@@ -62,7 +62,7 @@ const Filter: React.FC<Props> = ({ metrics }) => {
           </div>
         </div>
       )}
-      <Form.Group controlId="selectedMetricsForm">
+      <Form.Group className="mb-2" controlId="selectedMetricsForm">
         <Form.Label>Selected metrics</Form.Label>
         <div>
           {metrics.map(({ id, label }) => (
@@ -80,7 +80,8 @@ const Filter: React.FC<Props> = ({ metrics }) => {
           ))}
         </div>
       </Form.Group>
-    </>
+      <SaveFilters />
+    </div>
   )
 }
 
