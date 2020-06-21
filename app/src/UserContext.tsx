@@ -1,5 +1,10 @@
 import React, { createContext, useContext, useMemo, useState } from 'react'
 
+interface Ordering {
+  key: string
+  order: 'asc' | 'desc'
+}
+
 interface UserContext {
   user: string | null
   setUser: (user: string | null) => void
@@ -7,6 +12,8 @@ interface UserContext {
   setUserFiltersList: (userMetricsList: UserFilter[] | null) => void
   selectedMetrics: string[] | null
   setSelectedMetrics: (selectedMetrics: string[]) => void
+  ordering: Ordering | null
+  setOrdering: (ordering: Ordering) => void
 }
 
 const UserContext = createContext<UserContext>({
@@ -16,6 +23,8 @@ const UserContext = createContext<UserContext>({
   setUserFiltersList: () => {},
   selectedMetrics: [],
   setSelectedMetrics: () => {},
+  ordering: null,
+  setOrdering: () => {},
 })
 
 export const UserContextProvider: React.FC = ({ children }) => {
@@ -24,6 +33,7 @@ export const UserContextProvider: React.FC = ({ children }) => {
     null
   )
   const [selectedMetrics, setSelectedMetrics] = useState<string[] | null>(null)
+  const [ordering, setOrdering] = useState<Ordering | null>(null)
 
   const value = useMemo<UserContext>(
     () => ({
@@ -33,6 +43,8 @@ export const UserContextProvider: React.FC = ({ children }) => {
       setUserFiltersList,
       selectedMetrics,
       setSelectedMetrics,
+      ordering,
+      setOrdering,
     }),
     [
       user,
@@ -41,6 +53,8 @@ export const UserContextProvider: React.FC = ({ children }) => {
       setUserFiltersList,
       selectedMetrics,
       setSelectedMetrics,
+      ordering,
+      setOrdering,
     ]
   )
 
