@@ -12,6 +12,10 @@ const db = knex({
   connection: {
     host: '127.0.0.1',
     database: 'stock-screener',
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false,
+    },
   },
 })
 
