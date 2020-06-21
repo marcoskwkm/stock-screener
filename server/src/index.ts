@@ -25,23 +25,23 @@ const getDataHandler: RequestHandler = async (_, res) => {
   res.json({ data: mockedData, metrics: metricsList })
 }
 
-const getMetricsHandler: RequestHandler = async (req, res) => {
+const getFiltersHandler: RequestHandler = async (req, res) => {
   const user = req.query.user as string
 
   if (!user) {
     res.status(400).send('Invalid username')
   }
 
-  const userSavedMetrics = await db
+  const userSavedFilters = await db
     .select('name', 'metrics')
-    .from('metrics')
+    .from('filters')
     .where('username', '=', user)
 
-  res.json(userSavedMetrics)
+  res.json(userSavedFilters)
 }
 
 app.get('/', rootHandler)
 app.get('/get-data', getDataHandler)
-app.get('/get-metrics', getMetricsHandler)
+app.get('/get-filters', getFiltersHandler)
 
 app.listen(PORT)
