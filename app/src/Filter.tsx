@@ -12,6 +12,7 @@ const Filter: React.FC<Props> = ({ metrics }) => {
     userFiltersList,
     selectedMetrics,
     setSelectedMetrics,
+    setOrdering,
   } = useUserContext()
 
   if (!selectedMetrics || !metrics) {
@@ -20,6 +21,14 @@ const Filter: React.FC<Props> = ({ metrics }) => {
 
   const handleSelectSavedFilter = (userFilter: UserFilter) => {
     setSelectedMetrics(userFilter.metrics)
+    if (userFilter.ordering_key && userFilter.ordering_order) {
+      setOrdering({
+        key: userFilter.ordering_key,
+        order: userFilter.ordering_order,
+      })
+    } else {
+      setOrdering(null)
+    }
   }
 
   const handleSelectedMetricChange = (id: string, active: boolean) => {
@@ -42,7 +51,7 @@ const Filter: React.FC<Props> = ({ metrics }) => {
           <div>
             {userFiltersList.map((userFilter) => (
               <Button
-                className="p-0"
+                className="p-0 mr-2"
                 variant="link"
                 key={userFilter.name}
                 onClick={() => handleSelectSavedFilter(userFilter)}

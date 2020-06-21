@@ -2,7 +2,7 @@ import React, { createContext, useContext, useMemo, useState } from 'react'
 
 interface Ordering {
   key: string
-  order: 'asc' | 'desc'
+  order: OrderingOrder
 }
 
 interface UserContext {
@@ -13,7 +13,7 @@ interface UserContext {
   selectedMetrics: string[] | null
   setSelectedMetrics: (selectedMetrics: string[]) => void
   ordering: Ordering | null
-  setOrdering: (ordering: Ordering) => void
+  setOrdering: (ordering: Ordering | null) => void
 }
 
 const UserContext = createContext<UserContext>({

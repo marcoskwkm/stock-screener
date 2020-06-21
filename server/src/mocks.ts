@@ -280,6 +280,7 @@ interface Data {
   symbol: string
   name: string
   price: string
+  change: string
   pchange: string
   vol: string
   avgvol: string
@@ -291,16 +292,18 @@ export const mockedData: Data[] = rawData.map((item) => ({
   symbol: item[0],
   name: item[1],
   price: item[2],
-  pchange: item[3],
-  vol: item[4],
-  avgvol: item[5],
-  mktcap: item[6],
-  peratio: item[7],
+  change: item[3],
+  pchange: item[4],
+  vol: item[5],
+  avgvol: item[6],
+  mktcap: item[7],
+  peratio: item[8],
 }))
 
 export const metricsList = [
   { id: 'name', label: 'Name' },
   { id: 'price', label: 'Price' },
+  { id: 'change', label: 'Change' },
   { id: 'pchange', label: '% Change' },
   { id: 'vol', label: 'Volume' },
   { id: 'avgvol', label: 'Avg Vol (3 month)' },

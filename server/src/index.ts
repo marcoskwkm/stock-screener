@@ -33,7 +33,7 @@ const getFiltersHandler: RequestHandler = async (req, res) => {
   }
 
   const userSavedFilters = await db
-    .select('name', 'metrics')
+    .select('name', 'metrics', 'ordering_key', 'ordering_order')
     .from('filters')
     .where('username', '=', user)
 
