@@ -14,24 +14,24 @@ const Filter: React.FC<Props> = ({
   onSelectedMetricChange,
   onSelectSavedMetrics,
 }) => {
-  const { userMetricsList } = useUserContext()
+  const { userFiltersList } = useUserContext()
 
   return (
     <>
       <h5>Applied filters</h5>
-      {userMetricsList && (
+      {userFiltersList && (
         <div className="pb2">
           <Form.Label>Saved filters</Form.Label>
-          {userMetricsList.length === 0 && <p>No saved filters</p>}
+          {userFiltersList.length === 0 && <p>No saved filters</p>}
           <div>
-            {userMetricsList.map((userMetrics) => (
+            {userFiltersList.map((userFilters) => (
               <Button
                 className="p-0"
                 variant="link"
-                key={userMetrics.name}
-                onClick={() => onSelectSavedMetrics(userMetrics.metrics)}
+                key={userFilters.name}
+                onClick={() => onSelectSavedMetrics(userFilters.metrics)}
               >
-                {userMetrics.name}
+                {userFilters.name}
               </Button>
             ))}
           </div>

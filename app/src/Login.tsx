@@ -10,7 +10,7 @@ type State = 'initial' | 'form-open' | 'logged-in'
 const Login = () => {
   const [state, setState] = useState<State>('initial')
   const [loading, setLoading] = useState<boolean>(false)
-  const { user, setUser, setUserMetricsList } = useUserContext()
+  const { user, setUser, setUserFiltersList } = useUserContext()
 
   const handleUserInputChange = (event: any) => setUser(event.target.value)
 
@@ -24,9 +24,9 @@ const Login = () => {
     setLoading(true)
 
     axios
-      .get(`${SERVER_URL}/get-metrics?user=${user}`)
-      .then((res: AxiosResponse<UserMetrics[]>) => {
-        setUserMetricsList(res.data)
+      .get(`${SERVER_URL}/get-filters?user=${user}`)
+      .then((res: AxiosResponse<UserFilters[]>) => {
+        setUserFiltersList(res.data)
         setLoading(false)
         setState('logged-in')
       })
@@ -34,7 +34,7 @@ const Login = () => {
 
   const handleLogout = () => {
     setUser(null)
-    setUserMetricsList(null)
+    setUserFiltersList(null)
     setState('initial')
   }
 

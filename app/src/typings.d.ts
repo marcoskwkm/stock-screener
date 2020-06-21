@@ -4,7 +4,7 @@ interface Metric {
   active: boolean
 }
 
-interface UserMetrics {
+interface UserFilters {
   name: string
   metrics: string[]
 }

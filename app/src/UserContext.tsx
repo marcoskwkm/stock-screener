@@ -3,26 +3,26 @@ import React, { createContext, useContext, useMemo, useState } from 'react'
 interface UserContext {
   user: string | null
   setUser: (user: string | null) => void
-  userMetricsList: UserMetrics[] | null
-  setUserMetricsList: (userMetricsList: UserMetrics[] | null) => void
+  userFiltersList: UserFilters[] | null
+  setUserFiltersList: (userMetricsList: UserFilters[] | null) => void
 }
 
 const UserContext = createContext<UserContext>({
   user: null,
   setUser: () => {},
-  userMetricsList: null,
-  setUserMetricsList: () => {},
+  userFiltersList: null,
+  setUserFiltersList: () => {},
 })
 
 export const UserContextProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<string | null>(null)
-  const [userMetricsList, setUserMetricsList] = useState<UserMetrics[] | null>(
+  const [userFiltersList, setUserFiltersList] = useState<UserFilters[] | null>(
     null
   )
 
   const value = useMemo<UserContext>(
-    () => ({ user, setUser, userMetricsList, setUserMetricsList }),
-    [user, setUser, userMetricsList, setUserMetricsList]
+    () => ({ user, setUser, userFiltersList, setUserFiltersList }),
+    [user, setUser, userFiltersList, setUserFiltersList]
   )
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>
