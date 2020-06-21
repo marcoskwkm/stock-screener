@@ -1,6 +1,8 @@
-import React from 'react'
-import { Button, Form } from 'react-bootstrap'
+import React, { useState, useEffect } from 'react'
+import axios, { AxiosResponse } from 'axios'
+import { Button, Form, Spinner } from 'react-bootstrap'
 
+import { SERVER_URL } from './constants'
 import SaveFilters from './SaveFilters'
 import { useUserContext } from './UserContext'
 
@@ -9,12 +11,32 @@ interface Props {
 }
 
 const Filter: React.FC<Props> = ({ metrics }) => {
+  const [loading, setLoading] = useState<boolean>(false)
+
   const {
+    user,
     userFiltersList,
+    setUserFiltersList,
     selectedMetrics,
     setSelectedMetrics,
     setOrdering,
   } = useUserContext()
+
+  // Fetch userFiltersList
+  useEffect(() => {
+    if (!user) {
+      return
+    }
+
+    setLoading(true)
+
+    axios
+      .get(`${SERVER_URL}/get-filters?user=${user}`)
+      .then((res: AxiosResponse<UserFilter[]>) => {
+        setUserFiltersList(res.data)
+        setLoading(false)
+      })
+  }, [user, setUserFiltersList])
 
   if (!selectedMetrics || !metrics) {
     return null
@@ -44,7 +66,19 @@ const Filter: React.FC<Props> = ({ metrics }) => {
 
   return (
     <div className="mb-2">
-      <h5>Applied filters</h5>
+      <div className="flex mb-2">
+        <h5 className="my-auto">Applied filters</h5>
+        {loading && (
+          <Spinner
+            as="span"
+            animation="border"
+            variant="secondary"
+            size="sm"
+            className="my-auto ml-2"
+          />
+        )}
+      </div>
+
       {userFiltersList && userFiltersList.length > 0 && (
         <div className="pb-2">
           <Form.Label>Saved filters</Form.Label>

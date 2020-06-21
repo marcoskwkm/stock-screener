@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useMemo, useState } from 'react'
 
+import { useStateWithStorage } from './utils'
+
 interface Ordering {
   key: string
   order: OrderingOrder
@@ -28,12 +30,24 @@ const UserContext = createContext<UserContext>({
 })
 
 export const UserContextProvider: React.FC = ({ children }) => {
-  const [user, setUser] = useState<string | null>(null)
+  const [user, setUser] = useStateWithStorage(
+    (s) => s,
+    (s) => s,
+    'context-user'
+  )
   const [userFiltersList, setUserFiltersList] = useState<UserFilter[] | null>(
     null
   )
-  const [selectedMetrics, setSelectedMetrics] = useState<string[] | null>(null)
-  const [ordering, setOrdering] = useState<Ordering | null>(null)
+  const [selectedMetrics, setSelectedMetrics] = useStateWithStorage<string[]>(
+    (a) => a.toString(),
+    (s) => s.split(','),
+    'context-selectedMetrics'
+  )
+  const [ordering, setOrdering] = useStateWithStorage<Ordering>(
+    (o) => JSON.stringify(o),
+    (s) => JSON.parse(s) as Ordering,
+    'context-ordering'
+  )
 
   const value = useMemo<UserContext>(
     () => ({

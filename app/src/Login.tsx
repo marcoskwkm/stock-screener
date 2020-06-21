@@ -1,8 +1,6 @@
-import React, { useState } from 'react'
-import axios, { AxiosResponse } from 'axios'
+import React, { useEffect, useState } from 'react'
 import { Button, Form, Nav, Navbar, Spinner } from 'react-bootstrap'
 
-import { SERVER_URL } from './constants'
 import { useUserContext } from './UserContext'
 
 type State = 'initial' | 'form-open' | 'logged-in'
@@ -14,6 +12,12 @@ const Login = () => {
 
   const { user, setUser, setUserFiltersList } = useUserContext()
 
+  useEffect(() => {
+    if (user && state !== 'logged-in') {
+      setState('logged-in')
+    }
+  }, [user, state])
+
   const handleUserInputChange = (event: any) => setUserInput(event.target.value)
 
   const handleSubmit = async (event: any) => {
@@ -23,16 +27,12 @@ const Login = () => {
       return
     }
 
+    // Setting loading here is useless, but left here once proper authentication
+    // is implemented
     setLoading(true)
-
-    axios
-      .get(`${SERVER_URL}/get-filters?user=${userInput}`)
-      .then((res: AxiosResponse<UserFilter[]>) => {
-        setUserFiltersList(res.data)
-        setLoading(false)
-        setUser(userInput)
-        setState('logged-in')
-      })
+    setUser(userInput)
+    setLoading(false)
+    setState('logged-in')
   }
 
   const handleLogout = () => {

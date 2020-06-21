@@ -12,7 +12,7 @@ const Screener = () => {
   const [metrics, setMetrics] = useState<Metric[] | null>(null)
   const [metricsData, setMetricsData] = useState<any>(null)
 
-  const { setSelectedMetrics } = useUserContext()
+  const { selectedMetrics, setSelectedMetrics } = useUserContext()
 
   // Load data
   useEffect(() => {
@@ -20,10 +20,16 @@ const Screener = () => {
       const { data, metrics } = res.data
       setMetrics(metrics)
       setMetricsData(data)
-      setSelectedMetrics(metrics.map((metric: Metric) => metric.id))
       setLoading(false)
     })
-  }, [setSelectedMetrics])
+  }, [])
+
+  // Set default selected metrics
+  useEffect(() => {
+    if (!selectedMetrics && metrics) {
+      setSelectedMetrics(metrics.map((metric: Metric) => metric.id))
+    }
+  }, [metrics, selectedMetrics, setSelectedMetrics])
 
   if (loading) {
     return (

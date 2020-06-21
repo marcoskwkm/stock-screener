@@ -14,6 +14,7 @@ const Metrics: React.FC<Props> = ({ metrics, data }) => {
 
   const { ordering, setOrdering, selectedMetrics } = useUserContext()
 
+  // Sorts rows based on the values of ordering
   useEffect(() => {
     const ordered = data.concat()
 
@@ -33,8 +34,6 @@ const Metrics: React.FC<Props> = ({ metrics, data }) => {
 
     setOrderedData(ordered)
   }, [data, ordering])
-
-  useEffect(() => console.log(ordering), [ordering])
 
   if (!selectedMetrics || !metrics || !orderedData) {
     return null
