@@ -1,20 +1,36 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Button, Form } from 'react-bootstrap'
 
 import { useUserContext } from './UserContext'
 
 interface Props {
-  metrics: any
-  onSelectedMetricChange: (id: string, active: boolean) => void
-  onSelectSavedMetrics: (selectedMetrics: string[]) => void
+  metrics: Metric[] | null
 }
 
-const Filter: React.FC<Props> = ({
-  metrics,
-  onSelectedMetricChange,
-  onSelectSavedMetrics,
-}) => {
-  const { userFiltersList } = useUserContext()
+const Filter: React.FC<Props> = ({ metrics }) => {
+  const {
+    userFiltersList,
+    selectedMetrics,
+    setSelectedMetrics,
+  } = useUserContext()
+
+  if (!selectedMetrics || !metrics) {
+    return null
+  }
+
+  const handleSelectSavedFilter = (userFilter: UserFilter) => {
+    setSelectedMetrics(userFilter.metrics)
+  }
+
+  const handleSelectedMetricChange = (id: string, active: boolean) => {
+    if (active) {
+      if (!selectedMetrics.includes(id)) {
+        setSelectedMetrics(selectedMetrics.concat(id))
+      }
+    } else {
+      setSelectedMetrics(selectedMetrics.filter((e) => e !== id))
+    }
+  }
 
   return (
     <>
@@ -24,14 +40,14 @@ const Filter: React.FC<Props> = ({
           <Form.Label>Saved filters</Form.Label>
           {userFiltersList.length === 0 && <p>No saved filters</p>}
           <div>
-            {userFiltersList.map((userFilters) => (
+            {userFiltersList.map((userFilter) => (
               <Button
                 className="p-0"
                 variant="link"
-                key={userFilters.name}
-                onClick={() => onSelectSavedMetrics(userFilters.metrics)}
+                key={userFilter.name}
+                onClick={() => handleSelectSavedFilter(userFilter)}
               >
-                {userFilters.name}
+                {userFilter.name}
               </Button>
             ))}
           </div>
@@ -40,16 +56,16 @@ const Filter: React.FC<Props> = ({
       <Form.Group controlId="selectedMetricsForm">
         <Form.Label>Selected metrics</Form.Label>
         <div>
-          {Object.keys(metrics).map((id: string) => (
+          {metrics.map(({ id, label }) => (
             <Form.Check
               inline
               type="checkbox"
               id={id}
               key={id}
-              label={metrics[id].label}
-              checked={metrics[id].active}
+              label={label}
+              checked={selectedMetrics.includes(id)}
               onChange={(event: any) =>
-                onSelectedMetricChange(id, event.target.checked)
+                handleSelectedMetricChange(id, event.target.checked)
               }
             />
           ))}

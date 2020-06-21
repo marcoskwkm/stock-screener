@@ -1,20 +1,27 @@
 import React from 'react'
 
 import { Table } from 'react-bootstrap'
+import { useUserContext } from './UserContext'
 
 interface Props {
-  metrics: any
+  metrics: Metric[] | null
   data: any
 }
 
 const Metrics: React.FC<Props> = ({ metrics, data }) => {
+  const { selectedMetrics } = useUserContext()
+
+  if (!selectedMetrics || !metrics) {
+    return null
+  }
+
   return (
     <Table size="sm">
       <thead>
         <tr>
           <th>Symbol</th>
-          {Object.keys(metrics).map((id) =>
-            metrics[id].active ? <th key={id}>{metrics[id].label}</th> : null
+          {metrics.map(({ id, label }) =>
+            selectedMetrics.includes(id) ? <th key={id}>{label}</th> : null
           )}
         </tr>
       </thead>
@@ -22,8 +29,8 @@ const Metrics: React.FC<Props> = ({ metrics, data }) => {
         {data.map((row: any) => (
           <tr key={row.symbol}>
             <td>{row.symbol}</td>
-            {Object.keys(metrics).map((id) =>
-              metrics[id].active ? <td key={id}>{row[id]}</td> : null
+            {metrics.map(({ id }) =>
+              selectedMetrics.includes(id) ? <td key={id}>{row[id]}</td> : null
             )}
           </tr>
         ))}

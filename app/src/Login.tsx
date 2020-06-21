@@ -25,7 +25,7 @@ const Login = () => {
 
     axios
       .get(`${SERVER_URL}/get-filters?user=${user}`)
-      .then((res: AxiosResponse<UserFilters[]>) => {
+      .then((res: AxiosResponse<UserFilter[]>) => {
         setUserFiltersList(res.data)
         setLoading(false)
         setState('logged-in')

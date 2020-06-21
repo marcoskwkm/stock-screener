@@ -1,10 +1,9 @@
 interface Metric {
   id: string
   label: string
-  active: boolean
 }
 
-interface UserFilters {
+interface UserFilter {
   name: string
   metrics: string[]
 }

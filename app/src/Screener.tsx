@@ -1,58 +1,29 @@
 import React, { useEffect, useState } from 'react'
 import axios, { AxiosResponse } from 'axios'
+import { Container, Row, Spinner } from 'react-bootstrap'
 
 import { SERVER_URL } from './constants'
 import Filter from './Filter'
 import Metrics from './Metrics'
-
-import { Container, Row, Spinner } from 'react-bootstrap'
+import { useUserContext } from './UserContext'
 
 const Screener = () => {
   const [loading, setLoading] = useState<boolean>(true)
-  const [metrics, setMetrics] = useState<any>(null)
+  const [metrics, setMetrics] = useState<Metric[] | null>(null)
   const [metricsData, setMetricsData] = useState<any>(null)
+
+  const { setSelectedMetrics } = useUserContext()
 
   // Load data
   useEffect(() => {
     axios.get(`${SERVER_URL}/get-data`).then((res: AxiosResponse<any>) => {
       const { data, metrics } = res.data
-      setMetrics(
-        metrics.reduce(
-          (acc: any, metric: Metric) => ({
-            ...acc,
-            [metric.id]: {
-              label: metric.label,
-              active: true,
-            },
-          }),
-          {}
-        )
-      )
+      setMetrics(metrics)
       setMetricsData(data)
+      setSelectedMetrics(metrics.map((metric: Metric) => metric.id))
       setLoading(false)
     })
-  }, [])
-
-  const handleSelectedMetricChange = (id: string, active: boolean) =>
-    setMetrics({
-      ...metrics,
-      [id]: {
-        ...metrics[id],
-        active,
-      },
-    })
-
-  const handleSelectSavedMetrics = (selectedMetrics: string[]) => {
-    setMetrics(
-      Object.keys(metrics).reduce((acc: any, id) => {
-        acc[id] = {
-          ...metrics[id],
-          active: selectedMetrics.includes(id),
-        }
-        return acc
-      }, {})
-    )
-  }
+  }, [setSelectedMetrics])
 
   if (loading) {
     return (
@@ -66,11 +37,7 @@ const Screener = () => {
 
   return (
     <div className="pa3">
-      <Filter
-        metrics={metrics}
-        onSelectedMetricChange={handleSelectedMetricChange}
-        onSelectSavedMetrics={handleSelectSavedMetrics}
-      />
+      <Filter metrics={metrics} />
       <Metrics metrics={metrics} data={metricsData} />
     </div>
   )
