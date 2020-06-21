@@ -3,3 +3,8 @@ interface Metric {
   label: string
   active: boolean
 }
+
+interface UserMetrics {
+  name: string
+  metrics: string[]
+}

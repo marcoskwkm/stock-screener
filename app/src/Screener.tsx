@@ -42,6 +42,18 @@ const Screener = () => {
       },
     })
 
+  const handleSelectSavedMetrics = (selectedMetrics: string[]) => {
+    setMetrics(
+      Object.keys(metrics).reduce((acc: any, id) => {
+        acc[id] = {
+          ...metrics[id],
+          active: selectedMetrics.includes(id),
+        }
+        return acc
+      }, {})
+    )
+  }
+
   if (loading) {
     return (
       <Container>
@@ -57,6 +69,7 @@ const Screener = () => {
       <Filter
         metrics={metrics}
         onSelectedMetricChange={handleSelectedMetricChange}
+        onSelectSavedMetrics={handleSelectSavedMetrics}
       />
       <Metrics metrics={metrics} data={metricsData} />
     </div>

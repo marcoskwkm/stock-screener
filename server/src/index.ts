@@ -33,7 +33,7 @@ const getMetricsHandler: RequestHandler = async (req, res) => {
   }
 
   const userSavedMetrics = await db
-    .select('name', 'metrics_list')
+    .select('name', 'metrics')
     .from('metrics')
     .where('username', '=', user)
 
